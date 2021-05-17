@@ -1,4 +1,4 @@
-import PRODUCTS from "../../data/mock-data";
+import PRODUCTS from '../../data/mock-data'
 
 const initialState = {
   availableProducts: PRODUCTS, // all products in the inventory

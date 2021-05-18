@@ -16,7 +16,7 @@ const ProductsNavigator = createStackNavigator({
             
         },
         headerTitleStyle: {
-            fontFamily: 'nanum-myeongjo-bold'
+            fontFamily: 'nanum-myeongjo-extrabold'
         },
         headerBackTitleStyle: {
             fontFamily: 'nanum-myeongjo-bold'

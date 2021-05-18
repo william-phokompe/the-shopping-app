@@ -12,12 +12,14 @@ export default (state = initialState, action) => {
       const addedProduct = action.product;
       const productPrice = action.product.price;
       const productTitle = action.product.title;
+      const productImage = action.product.imageUrl;
 
       let cartItem;
 
       if (state.items[addedProduct.id]) {
         // Already have the item in the cart
         cartItem = new CartItem(
+          productImage,
           state.items[addedProduct.id].quantity + 1,
           productPrice,
           productTitle,
@@ -26,6 +28,7 @@ export default (state = initialState, action) => {
       } else {
         // Create a new cart item
         cartItem = new CartItem(
+          productImage,
           1,
           productPrice,
           productTitle,

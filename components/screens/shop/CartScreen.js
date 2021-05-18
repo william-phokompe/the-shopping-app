@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Colors from "../../../constants/Colors";
 import CartItem from "../../shop/CartItem";
 import * as cartActions from "../../../store/actions/cartActions";
+import * as ordersActions from "../../../store/actions/ordersActions";
 
 const CartScreen = (props) => {
   const dispatch = useDispatch();
@@ -38,6 +39,9 @@ const CartScreen = (props) => {
           color={Colors.secondary}
           title="Order"
           disabled={cartItems.length === 0}
+          onPress={(_) => {
+            dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
+          }}
         />
       </View>
 

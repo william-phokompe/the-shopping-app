@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   },
 
   price: {
+    fontFamily: "nanum-myeongjo-bold",
     fontSize: 20,
     color: "#888",
     textAlign: "center",
@@ -58,9 +59,10 @@ const styles = StyleSheet.create({
   },
 
   description: {
+    fontFamily: "nanum-myeongjo-regular",
     fontSize: 14,
     textAlign: "center",
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
 });
 

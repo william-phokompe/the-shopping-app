@@ -80,9 +80,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     marginVertical: 4,
+    fontFamily: "nanum-myeongjo-bold",
   },
 
   price: {
+    fontFamily: "nanum-myeongjo-bold",
     fontSize: 14,
     color: "#888",
   },
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
   },
 
   details: {
+    fontFamily: "nanum-myeongjo-regular",
     alignItems: "center",
     height: "15%",
     padding: 10,

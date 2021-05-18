@@ -1,15 +1,23 @@
 import React from "react";
-import { FlatList, Platform } from "react-native";
+import { FlatList, Platform, Button } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import ProductItem from "../../shop/ProductItem";
 import * as cartActions from "../../../store/actions/cartActions";
 import HeaderButton from "../../UI/HeaderButton";
+import Colors from "../../../constants/Colors";
 
 const ProductsOverviewScreen = (props) => {
   const products = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
+
+  const selectItemHandler = (id, title) => {
+    props.navigation.navigate("ProductDetail", {
+      productId: id,
+      productTitle: title,
+    });
+  };
   return (
     <FlatList
       keyExtractor={(item) => item.id}
@@ -17,16 +25,25 @@ const ProductsOverviewScreen = (props) => {
       renderItem={(itemData) => (
         <ProductItem
           prod={itemData.item}
-          onViewDetail={(_) => {
-            props.navigation.navigate("ProductDetail", {
-              productId: itemData.item.id,
-              productTitle: itemData.item.title,
-            });
+          onSelect={(_) => {
+            selectItemHandler(itemData.item.id, itemData.item.title);
           }}
-          onAddToCart={(_) => {
-            dispatch(cartActions.addToCart(itemData.item));
-          }}
-        />
+        >
+          <Button
+            color={Colors.primary}
+            title="View Details"
+            onPress={(_) => {
+              selectItemHandler(itemData.item.id, itemData.item.title);
+            }}
+          />
+          <Button
+            color={Colors.primary}
+            title="Add To Cart"
+            onPress={(_) => {
+              dispatch(cartActions.addToCart(itemData.item));
+            }}
+          />
+        </ProductItem>
       )}
     />
   );
@@ -57,7 +74,6 @@ ProductsOverviewScreen.navigationOptions = (navigationData) => {
         />
       </HeaderButtons>
     ),
-    
   };
 };
 

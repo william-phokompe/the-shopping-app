@@ -9,7 +9,7 @@ import {
   TouchableNativeFeedback,
   Platform,
 } from "react-native";
-import Colors from "../constants/Colors";
+import Colors from "../../constants/Colors";
 
 const ProductItem = (props) => {
   let TouchableComponent = TouchableOpacity;

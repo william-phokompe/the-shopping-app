@@ -1,8 +1,14 @@
 import React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, Platform } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import ProductItem from "../../ProductItem";
-import * as cartActions from '../../../store/actions/cartActions'
+import {
+  HeaderButtons,
+  Item,
+} from "react-navigation-header-buttons";
+
+import ProductItem from "../../shop/ProductItem";
+import * as cartActions from "../../../store/actions/cartActions";
+import HeaderButton from "../../UI/HeaderButton";
 
 const ProductsOverviewScreen = (props) => {
   const products = useSelector((state) => state.products.availableProducts);
@@ -17,11 +23,11 @@ const ProductsOverviewScreen = (props) => {
           onViewDetail={(_) => {
             props.navigation.navigate("ProductDetail", {
               productId: itemData.item.id,
-              productTitle: itemData.item.title
+              productTitle: itemData.item.title,
             });
           }}
           onAddToCart={(_) => {
-              dispatch(cartActions.addToCart(itemData.item))
+            dispatch(cartActions.addToCart(itemData.item));
           }}
         />
       )}
@@ -31,6 +37,17 @@ const ProductsOverviewScreen = (props) => {
 
 ProductsOverviewScreen.navigationOptions = {
   headerTitle: "Shop",
+  headerRight: _ => (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Favorite"
+        iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+        onPress={() => {
+          console.log('Mark as favorite!');
+        }}
+      />
+    </HeaderButtons>
+  )
 };
 
 export default ProductsOverviewScreen;

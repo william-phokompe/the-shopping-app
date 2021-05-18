@@ -35,10 +35,21 @@ const ProductsOverviewScreen = (props) => {
 ProductsOverviewScreen.navigationOptions = (navigationData) => {
   return {
     headerTitle: "Shop",
+    headerLeft: (_) => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+          onPress={() => {
+            navigationData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
     headerRight: (_) => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title="Favorite"
+          title="Cart"
           iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
           onPress={() => {
             navigationData.navigation.navigate("Cart");
@@ -46,6 +57,7 @@ ProductsOverviewScreen.navigationOptions = (navigationData) => {
         />
       </HeaderButtons>
     ),
+    
   };
 };
 

@@ -4,17 +4,20 @@ import { Provider } from "react-redux";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { enableScreens } from "react-native-screens";
+/*import { composeWithDevTools } from 'redux-devtools-extension'; */
 
 import productReducer from "./store/reducers/products";
 import ShopNavigator from "./navigation/ShopNavigator";
+import cartReducer from "./store/reducers/cart"
 
 enableScreens();
 
 const rootReducer = combineReducers({
   products: productReducer,
+  cart: cartReducer
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer/*, composeWithDevTools() */);
 
 const fetchFonts = (_) => {
   return Font.loadAsync({

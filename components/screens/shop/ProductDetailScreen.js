@@ -8,11 +8,13 @@ import {
   Button,
 } from "react-native";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Colors from "../../../constants/Colors";
+import * as cartActions from '../../../store/actions/cartActions'
 
 const ProductDetailScreen = (props) => {
   const productId = props.navigation.getParam("productId");
+  const dispatch = useDispatch();
   const selectedProduct = useSelector((state) =>
     state.products.availableProducts.find((prod) => prod.id === productId)
   );
@@ -24,7 +26,9 @@ const ProductDetailScreen = (props) => {
         <Button
           color={Colors.primary}
           title="Add To Cart"
-          onPress={(_) => {}}
+          onPress={(_) => {
+              dispatch(cartActions.addToCart(selectedProduct))
+          }}
         />
       </View>
       <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>

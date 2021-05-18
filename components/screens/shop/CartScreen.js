@@ -50,7 +50,10 @@ const CartScreen = (props) => {
         keyExtractor={(item) => item.productId}
         renderItem={(itemData) => (
           <CartItem
-            product={itemData.item}
+            quantity={itemData.item.quantity}
+            title={itemData.item.productTitle}
+            amount={itemData.item.productPrice}
+            deletable
             onRemove={(_) => {
               dispatch(cartActions.removeFromCart(itemData.item.productId));
             }}

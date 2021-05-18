@@ -17,15 +17,15 @@ const CartItem = (props) => {
   return (
     <View style={styles.cartItem}>
       <View style={styles.itemData}>
-        <Text style={styles.quantity}>{props.product.quantity} </Text>
-        <Text style={styles.mainText}>{props.product.productTitle}</Text>
+        <Text style={styles.quantity}>{props.quantity} </Text>
+        <Text style={styles.mainText}>{props.title}</Text>
       </View>
 
       <View style={styles.itemData}>
         <Text style={styles.mainText}>
-          ${props.product.productPrice.toFixed(2)}
+          ${props.amount.toFixed(2)}
         </Text>
-        <TouchableComponent
+        {props.deletable && <TouchableComponent
           onPress={props.onRemove}
           style={styles.deleteButton}
         >
@@ -34,7 +34,7 @@ const CartItem = (props) => {
             size={20}
             color="red"
           />
-        </TouchableComponent>
+        </TouchableComponent>}
       </View>
     </View>
   );

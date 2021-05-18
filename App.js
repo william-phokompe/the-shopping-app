@@ -10,7 +10,12 @@ import ShopNavigator from "./navigation/ShopNavigator";
 import cartReducer from "./store/reducers/cart";
 import ordersReducer from "./store/reducers/orders";
 
+import {LogBox} from 'react-native'
+
 enableScreens();
+
+// Ignore log notification by message
+LogBox.ignoreLogs(['Warning: ...'])
 
 const rootReducer = combineReducers({
   products: productReducer,

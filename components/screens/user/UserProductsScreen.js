@@ -17,16 +17,15 @@ const UserProductsScreen = () => {
         <ProductItem prod={itemData.item} onSelect={(_) => {}}>
           <Button
             color={Colors.primary}
-            title="View Details"
+            title="Edit"
             onPress={(_) => {
-              selectItemHandler(itemData.item.id, itemData.item.title);
+            
             }}
           />
           <Button
             color={Colors.primary}
-            title="Add To Cart"
+            title="Delete"
             onPress={(_) => {
-              dispatch(cartActions.addToCart(itemData.item));
             }}
           />
         </ProductItem>

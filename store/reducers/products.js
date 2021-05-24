@@ -3,6 +3,7 @@ import Product from "../../models/Product";
 import {
   CREATE_PRODUCT,
   DELETE_PRODUCT,
+  SET_PRODUCTS,
   UPDATE_PRODUCT,
 } from "../actions/productsAction";
 
@@ -13,6 +14,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SET_PRODUCTS:
+      return {
+        availableProducts: action.products,
+        userProducts: action.products.filter((prod) => prod.ownerId === "u1"),
+      };
     case DELETE_PRODUCT:
       return {
         ...state,
@@ -64,7 +70,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         availableProducts: state.availableProducts.concat(newProduct),
-        userProducts: state.userProducts.concat(newProduct)
+        userProducts: state.userProducts.concat(newProduct),
       };
     default:
       break;

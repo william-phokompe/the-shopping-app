@@ -72,12 +72,12 @@ export default (state = initialState, action) => {
     case ADD_ORDER:
       return initialState;
     case DELETE_PRODUCT:
-      if (state.items[action.pid]) {
+      if (state.items[action.productId]) {
         return state;
       }
       const updatedItems = { ...state.items };
-      const itemTotal = state.items[action.pid].sum;
-      delete updatedCartItems[action.pid];
+      const itemTotal = state.items[action.productId].sum;
+      delete updatedCartItems[action.productId];
       return {
         ...state,
         items: updatedItems,

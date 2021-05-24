@@ -5,7 +5,7 @@ import {
   Text,
   ScrollView,
   TextInput,
-  Platform,
+  Platform
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -43,6 +43,7 @@ const EditProductScreen = (props) => {
         productsActions.CreateProduct(title, description, imageUrl, +price)
       );
     }
+    props.navigation.goBack();
   }, [dispatch, productId, title, description, imageUrl, price]);
 
   useEffect(() => {

@@ -9,13 +9,15 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+import Card from '../UI/Card'
+
 const CartItem = (props) => {
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21)
     TouchableComponent = TouchableNativeFeedback;
   return (
-    <View style={styles.cartItem}>
+    <Card childstyle={styles.cartItem}>
       <View style={styles.itemData}>
         <Text style={styles.quantity}>{props.quantity} </Text>
         <Text style={styles.mainText}>{props.title}</Text>
@@ -36,7 +38,7 @@ const CartItem = (props) => {
           />
         </TouchableComponent>}
       </View>
-    </View>
+    </Card>
   );
 };
 
@@ -46,13 +48,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginHorizontal: 10,
-    shadowColor: "black",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 5,
-    backgroundColor: "white",
     marginBottom: 7
   },
 

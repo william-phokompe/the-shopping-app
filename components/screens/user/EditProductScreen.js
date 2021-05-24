@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useReducer } from "react";
 import {
   StyleSheet,
   View,
@@ -14,6 +14,11 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../UI/HeaderButton";
 import * as productsActions from "../../../store/actions/productsAction";
 
+const formReducer = (state, action) => {
+  if (action.type === "FORM_UPDATE") {
+  }
+};
+
 const EditProductScreen = (props) => {
   const productId = props.navigation.getParam("productId");
   const dispatch = useDispatch();
@@ -22,15 +27,21 @@ const EditProductScreen = (props) => {
     state.products.userProducts.find((product) => product.id === productId)
   );
 
-  const [title, setTitle] = useState(editedProduct ? editedProduct.title : "");
-  const [isTitleValid, setIsTitleValid] = useState(false);
-  const [imageUrl, setImageUrl] = useState(
-    editedProduct ? editedProduct.imageUrl : ""
-  );
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState(
-    editedProduct ? editedProduct.description : ""
-  );
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValue: {
+      title: editedProduct ? editedProduct.title : "",
+      imageUrl: editedProduct ? editedProduct.imageUrl : "",
+      description: editedProduct ? editedProduct.description : "",
+      price: "",
+    },
+    inputValidities: {
+      title: editedProduct ? true : false,
+      imageUrl: editedProduct ? true : false,
+      description: editedProduct ? true : false,
+      price: editedProduct ? true : false,
+    },
+    formIsValid: editedProduct ? true : false,
+  });
 
   // CallBack ensures that this function isn't recreated everytim ethe component re-renders,
   // therefore avoids entering an infinite loop
@@ -39,7 +50,7 @@ const EditProductScreen = (props) => {
       Alert.alert("invalid input", "Please fill in missing inputs", [
         { text: "Okay" },
       ]);
-      return ;
+      return;
     }
     if (editedProduct) {
       dispatch(
@@ -58,13 +69,18 @@ const EditProductScreen = (props) => {
   }, [submitHandler]);
 
   const titleChangeHandler = (text) => {
-    if (text.trim().length === 0) {
-      setIsTitleValid(false);
-    } else {
-      setIsTitleValid(false);
+    let isValid = false;
+
+    if (text.trim().length > 0) {
+      isValid = true;
     }
 
-    setTitle(text);
+    dispatchFormState({
+      type: "FORM_UPDATE",
+      value: text,
+      isValid: isValid,
+      inputId: "title",
+    });
   };
 
   return (

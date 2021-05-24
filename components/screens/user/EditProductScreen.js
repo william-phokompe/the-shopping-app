@@ -5,7 +5,8 @@ import {
   Text,
   ScrollView,
   TextInput,
-  Platform
+  Platform,
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -22,6 +23,7 @@ const EditProductScreen = (props) => {
   );
 
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : "");
+  const [isTitleValid, setIsTitleValid] = useState(false);
   const [imageUrl, setImageUrl] = useState(
     editedProduct ? editedProduct.imageUrl : ""
   );
@@ -33,12 +35,17 @@ const EditProductScreen = (props) => {
   // CallBack ensures that this function isn't recreated everytim ethe component re-renders,
   // therefore avoids entering an infinite loop
   const submitHandler = useCallback(() => {
+    if (!isTitleValid) {
+      Alert.alert("invalid input", "Please fill in missing inputs", [
+        { text: "Okay" },
+      ]);
+      return ;
+    }
     if (editedProduct) {
       dispatch(
         productsActions.UpdateProduct(productId, title, description, imageUrl)
       );
     } else {
-      
       dispatch(
         productsActions.CreateProduct(title, description, imageUrl, +price)
       );
@@ -50,6 +57,16 @@ const EditProductScreen = (props) => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
+  const titleChangeHandler = (text) => {
+    if (text.trim().length === 0) {
+      setIsTitleValid(false);
+    } else {
+      setIsTitleValid(false);
+    }
+
+    setTitle(text);
+  };
+
   return (
     <ScrollView>
       <View style={styles.form}>
@@ -58,18 +75,19 @@ const EditProductScreen = (props) => {
           <TextInput
             style={styles.input}
             value={title}
-            onChangeText={(text) => setTitle(text)}
+            onChangeText={titleChangeHandler}
             keyboardType="default"
             returnKeyType="next"
             autoCorrect
           />
+          {!isTitleValid && <Text>Please enter a valid text!</Text>}
         </View>
         <View styles={styles.formControl}>
           <Text style={styles.label}>ImageUrl</Text>
           <TextInput
             style={styles.input}
             value={imageUrl}
-            onChangeText={text => setImageUrl(text)}
+            onChangeText={(text) => setImageUrl(text)}
             keyboardType="default"
             returnKeyType="next"
           />
@@ -80,7 +98,7 @@ const EditProductScreen = (props) => {
             <TextInput
               style={styles.input}
               value={price}
-              onChangeText={text => setPrice(text)}
+              onChangeText={(text) => setPrice(text)}
               keyboardType="decimal-pad"
               returnKeyType="next"
             />
@@ -91,7 +109,7 @@ const EditProductScreen = (props) => {
           <TextInput
             style={styles.input}
             value={description}
-            onChangeText={text => setDescription(text)}
+            onChangeText={(text) => setDescription(text)}
             keyboardType="default"
             multiline={true}
             onSubmitEditing={submitHandler}

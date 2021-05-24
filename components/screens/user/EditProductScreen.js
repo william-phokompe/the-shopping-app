@@ -5,8 +5,8 @@ import {
   ScrollView,
   Platform,
   Alert,
-  Keyboard,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -14,6 +14,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../UI/HeaderButton";
 import * as productsActions from "../../../store/actions/productsAction";
 import Input from "../../UI/Input";
+import Colors from "../../../constants/Colors";
 
 const formReducer = (state, action) => {
   if (action.type === "FORM_UPDATE") {
@@ -44,6 +45,8 @@ const formReducer = (state, action) => {
 };
 
 const EditProductScreen = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const productId = props.navigation.getParam("productId");
   const dispatch = useDispatch();
 
@@ -67,35 +70,52 @@ const EditProductScreen = (props) => {
     formIsValid: editedProduct ? true : false,
   });
 
+  useEffect(() => {
+  if (error) {
+    Alert.alert('An error occurred', error, [{text: 'Okay'}])
+  }
+    return () => {
+      cleanup
+    };
+  }, [error]);
+
   // CallBack ensures that this function isn't recreated everytim ethe component re-renders,
   // therefore avoids entering an infinite loop
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
       Alert.alert("Invalid input", "Please fill in missing inputs", [
         { text: "Okay" },
       ]);
       return;
     }
-    if (editedProduct) {
-      dispatch(
-        productsActions.UpdateProduct(
-          productId,
-          formState.inputValues.title,
-          formState.inputValues.description,
-          formState.inputValues.imageUrl
-        )
-      );
-    } else {
-      dispatch(
-        productsActions.CreateProduct(
-          formState.inputValues.title,
-          formState.inputValues.description,
-          formState.inputValues.imageUrl,
-          +formState.inputValues.price
-        )
-      );
+
+    setError(null);
+    try {
+      setIsLoading(true);
+      if (editedProduct) {
+        await dispatch(
+          productsActions.UpdateProduct(
+            productId,
+            formState.inputValues.title,
+            formState.inputValues.description,
+            formState.inputValues.imageUrl
+          )
+        );
+      } else {
+        await dispatch(
+          productsActions.CreateProduct(
+            formState.inputValues.title,
+            formState.inputValues.description,
+            formState.inputValues.imageUrl,
+            +formState.inputValues.price
+          )
+        );
+      }
+      props.navigation.goBack();
+    } catch (error) {
+      setError(error);
     }
-    props.navigation.goBack();
+    setIsLoading(false);
   }, [dispatch, productId, formState]); // formState will change with every keystroke
 
   useEffect(() => {
@@ -113,6 +133,14 @@ const EditProductScreen = (props) => {
     },
     [dispatchFormState]
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100}>
@@ -174,6 +202,11 @@ const EditProductScreen = (props) => {
 const styles = StyleSheet.create({
   form: {
     margin: 20,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

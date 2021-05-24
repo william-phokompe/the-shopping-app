@@ -77,21 +77,14 @@ const ProductsOverviewScreen = (props) => {
       </View>
     );
   }
-  if (isLoading) {
+  if (!isLoading && products.length === 0) {
     return (
       <View style={styles.loader}>
         <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
-  if (!isLoading && products.length === 0) {
-    return (
-      <View style={styles.loader}>
-        <Text>No Products found, maybe start adding some...</Text>
-      </View>
-    );
-  }
-
+  
   return (
     <FlatList
       keyExtractor={(item) => item.id}

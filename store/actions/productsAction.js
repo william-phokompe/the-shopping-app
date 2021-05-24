@@ -10,7 +10,13 @@ export const fetchProducts = () => {
     fetch(
       "https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products.json"
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Something went wrong!")
+        }
+
+        return response.json();
+      })
       .then((data) => {
         const loadedProducts = [];
 
@@ -27,6 +33,9 @@ export const fetchProducts = () => {
           );
         }
         dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+      }).catch(err => {
+        // send to analytics server
+        throw err;
       });
   };
 };

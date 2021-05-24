@@ -8,8 +8,8 @@ import {
 } from "../actions/productsAction";
 
 const initialState = {
-  availableProducts: PRODUCTS, // all products in the inventory
-  userProducts: PRODUCTS.filter((prod) => prod.ownerId === "u1"), // User specific products
+  availableProducts: [], // all products in the inventory
+  userProducts: [], // User specific products
 };
 
 export default (state = initialState, action) => {

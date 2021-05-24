@@ -23,16 +23,33 @@ const ProductsOverviewScreen = (props) => {
   const [error, setError] = useState(undefined);
   const dispatch = useDispatch();
 
-  const loadProducts = useCallback(async (_) => {
-    setError(undefined);
-    setIsLoading(true);
-    try {
-      await dispatch(productActions.fetchProducts());
-    } catch (error) {
-      setError(error.message);
-    }
-    setIsLoading(false);
-  }, [dispatch, setIsLoading, setError]);
+  const loadProducts = useCallback(
+    async (_) => {
+      setError(undefined);
+      setIsLoading(true);
+      try {
+        await dispatch(productActions.fetchProducts());
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
+    },
+    [dispatch, setIsLoading, setError]
+  );
+
+  useEffect(
+    (_) => {
+      const willFocustSub = props.navigation.addListener(
+        "willFocus",
+        loadProducts
+      );
+
+      return () => {
+        willFocustSub.remove();
+      };
+    },
+    [loadProducts]
+  );
 
   useEffect(
     (_) => {
@@ -52,7 +69,11 @@ const ProductsOverviewScreen = (props) => {
     return (
       <View style={style.loader}>
         <Text>An error occurred!</Text>
-        <Button title="Try Again" onPress={loadProducts} color={Colors.primary} />
+        <Button
+          title="Try Again"
+          onPress={loadProducts}
+          color={Colors.primary}
+        />
       </View>
     );
   }

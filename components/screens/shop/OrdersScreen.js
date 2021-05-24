@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Text, Platorm } from "react-native";
+import { FlatList } from "react-native";
 import { useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 

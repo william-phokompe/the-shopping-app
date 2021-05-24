@@ -6,6 +6,7 @@ import Colors from "../../../constants/Colors";
 import CartItem from "../../shop/CartItem";
 import * as cartActions from "../../../store/actions/cartActions";
 import * as ordersActions from "../../../store/actions/ordersActions";
+import Card from '../../UI/Card';
 
 const CartScreen = (props) => {
   const dispatch = useDispatch();

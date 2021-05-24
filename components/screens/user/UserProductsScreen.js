@@ -23,6 +23,7 @@ const UserProductsScreen = (props) => {
         <ProductItem
           prod={itemData.item}
           onSelect={(_) => {
+            console.log("itemData.item")
             editProductHandler(itemData.item.id);
           }}
         >

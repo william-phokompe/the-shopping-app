@@ -5,6 +5,8 @@ import CartItem from "./CartItem";
 
 const OrderItem = (props) => {
   const [shwowDetails, setShowDetails] = useState(false);
+
+  console.log(props.items)
   return (
     <View style={styles.orderItem}>
       <View style={styles.summary}>

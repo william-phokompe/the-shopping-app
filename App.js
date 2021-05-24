@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { enableScreens } from "react-native-screens";
-import ReducThunk from 'redux-thunk'''
+import ReducThunk from 'redux-thunk'
 
 import productReducer from "./store/reducers/products";
 import ShopNavigator from "./navigation/ShopNavigator";

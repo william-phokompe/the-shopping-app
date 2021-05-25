@@ -61,6 +61,14 @@ const OrdersScreen = (props) => {
     );
   }
 
+  if (orders.length === 0) {
+    return (
+      <View style={styles.loader}>
+        <Text>There are no products here. Please add some</Text>
+      </View>
+    )
+  }
+
   return (
     <FlatList
       data={orders}

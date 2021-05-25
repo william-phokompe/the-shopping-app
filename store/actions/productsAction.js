@@ -6,7 +6,8 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const fetchProducts = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const userId = getState().auth.userId;
     const response = await fetch(
       "https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products.json"
     );
@@ -22,7 +23,7 @@ export const fetchProducts = () => {
       loadedProducts.push(
         new Product(
           key,
-          "u1",
+          data[key].ownerId,
           data[key].title,
           data[key].imageUrl,
           data[key].description,
@@ -30,7 +31,7 @@ export const fetchProducts = () => {
         )
       );
     }
-    dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+    dispatch({ type: SET_PRODUCTS, products: loadedProducts, userProducts: loadedProducts.filter(prod => prod.ownerId === userId) });
   };
 };
 
@@ -55,6 +56,7 @@ export const deleteProduct = (productId) => {
 export const CreateProduct = (title, description, imageUrl, price) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
+    const userId = getState().auth.userId;
     // Execute any async code !
     const response = await fetch(
       `https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products.json?auth=${token}`,
@@ -68,6 +70,7 @@ export const CreateProduct = (title, description, imageUrl, price) => {
           description,
           imageUrl,
           price,
+          ownerId: userId
         }),
       }
     );
@@ -82,6 +85,7 @@ export const CreateProduct = (title, description, imageUrl, price) => {
         description,
         imageUrl,
         price,
+        ownerId: userId
       },
     });
   };

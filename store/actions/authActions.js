@@ -57,13 +57,16 @@ export const signin = (email, password) => {
 
     if (!response.ok) {
       const errorResponse = await response.json();
-      const errorId = errorResponse.error.message;
+      console.log(errorResponse);
+      const errorId = errorResponse.error.errors[0].message;
       let message = "Something went wrong!";
 
       if (errorId === "EMAIL_NOT_FOUND") {
         message = "This email could not be found!";
       } else if (errorId === "INVALID_PASSWORD") {
         message = "Password is not valid";
+      } else if (errorId === "MISSING_PASSWORD") {
+        message = "Please enter password."
       }
 
       throw new Error(message);

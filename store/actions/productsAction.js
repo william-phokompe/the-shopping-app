@@ -35,9 +35,10 @@ export const fetchProducts = () => {
 };
 
 export const deleteProduct = (productId) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     const response = await fetch(
-      `https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products/${productId}.json`,
+      `https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products/${productId}.json?auth=${token}`,
       {
         method: "DELETE",
       }
@@ -52,10 +53,11 @@ export const deleteProduct = (productId) => {
 };
 
 export const CreateProduct = (title, description, imageUrl, price) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     // Execute any async code !
     const response = await fetch(
-      "https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products.json",
+      `https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products.json?auth=${token}`,
       {
         method: "POST",
         header: {
@@ -86,9 +88,10 @@ export const CreateProduct = (title, description, imageUrl, price) => {
 };
 
 export const UpdateProduct = (productId, title, description, imageUrl) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     const response = await fetch(
-      `https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products/${productId}.json`,
+      `https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products/${productId}.json?auth=${token}`,
       {
         method: "PATCH",
         headers: {

@@ -10,7 +10,7 @@ import productReducer from "./store/reducers/products";
 import ShopNavigator from "./navigation/ShopNavigator";
 import cartReducer from "./store/reducers/cart";
 import ordersReducer from "./store/reducers/orders";
-
+import authReducer from './store/reducers/auth'
 import {LogBox} from 'react-native'
 
 enableScreens();
@@ -22,6 +22,7 @@ const rootReducer = combineReducers({
   products: productReducer,
   cart: cartReducer,
   orders: ordersReducer,
+  auth: authReducer
 });
 
 const store = createStore(rootReducer /*, composeWithDevTools() */, applyMiddleware(ReducThunk));

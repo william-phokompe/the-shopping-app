@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useReducer } from "react";
+import React, { useEffect, useCallback, useReducer, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -71,12 +71,9 @@ const EditProductScreen = (props) => {
   });
 
   useEffect(() => {
-  if (error) {
-    Alert.alert('An error occurred', error, [{text: 'Okay'}])
-  }
-    return () => {
-      cleanup
-    };
+    if (error) {
+      Alert.alert("An error occurred", error, [{ text: "Okay" }]);
+    }
   }, [error]);
 
   // CallBack ensures that this function isn't recreated everytim ethe component re-renders,
@@ -92,6 +89,7 @@ const EditProductScreen = (props) => {
     setError(null);
     try {
       setIsLoading(true);
+      console.log("Clicked SAVE")
       if (editedProduct) {
         await dispatch(
           productsActions.UpdateProduct(
@@ -154,7 +152,7 @@ const EditProductScreen = (props) => {
             label="Title"
             errorMessage="Please enter a valid text!"
             onInputChange={inputChangeHandler}
-            initialvalue={editedProduct ? editedProduct.title : ""}
+            initialValue={editedProduct ? editedProduct.title : ""}
             initiallyValid={!!editedProduct}
             required
           />
@@ -164,7 +162,7 @@ const EditProductScreen = (props) => {
             errorMessage="Please add a valid image Url"
             keyboardType="default"
             onInputChange={inputChangeHandler}
-            initialvalue={editedProduct ? editedProduct.imageUrl : ""}
+            initialValue={editedProduct ? editedProduct.imageUrl : ""}
             initiallyValid={!!editedProduct}
             required
           />
@@ -187,7 +185,7 @@ const EditProductScreen = (props) => {
             multiline
             numberofLines={3}
             errorMessage="Valid description required"
-            initialvalue={editedProduct ? editedProduct.description : ""}
+            initialValue={editedProduct ? editedProduct.description : ""}
             initiallyValid={!!editedProduct}
             onInputChange={inputChangeHandler}
             required

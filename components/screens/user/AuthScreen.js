@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useReducer } from "react";
+import React, { useEffect, useCallback, useReducer, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -44,7 +44,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const AuthScreen = () => {
+const AuthScreen = (props) => {
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isSignup, setSignup] = useState(false);
@@ -65,7 +65,7 @@ const AuthScreen = () => {
   useEffect(
     (_) => {
       if (error) {
-        Alert.alert("An error has occurred", error, [{ text: Okay }]);
+        Alert.alert("An error has occurred", error, [{ text: "Okay" }]);
       }
     },
     [error]
@@ -88,10 +88,12 @@ const AuthScreen = () => {
     setIsLoading(true);
     try {
       await dispatch(action);
+
+      !isSignup ? props.navigation.navigate("Shop") : setSignup(false);
     } catch (err) {
-      setError(err);
+      setError(err.message);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const inputChangeHandler = useCallback(

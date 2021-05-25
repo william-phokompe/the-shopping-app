@@ -43,22 +43,36 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = () => {
+  const [isSignup, setSignup] = useState(false);
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      email: '',
-      password: ''
+      email: "",
+      password: "",
     },
     inputValidities: {
       email: false,
-      password: false
+      password: false,
     },
     formIsValid: false,
   });
 
-  const signupDispatcher = (_) => {
-    dispatch(authActions.signup(formState.inputValues.email, formState.inputValues.password));
+  const authDispatcher = (_) => {
+    let action;
+    if (isSignup) {
+      action = authActions.signup(
+        formState.inputValues.email,
+        formState.inputValues.password
+      );
+    } else {
+      action = authActions.signin(
+        formState.inputValues.email,
+        formState.inputValues.password
+      );
+    }
+
+    dispatch(action);
   };
 
   const inputChangeHandler = useCallback(
@@ -103,16 +117,18 @@ const AuthScreen = () => {
             />
             <View style={styles.buttonContainer}>
               <Button
-                title="Login"
+                title={isSignup ? "Sign Up" : "Sign In"}
                 color={Colors.primary}
-                onPress={signupDispatcher}
+                onPress={authDispatcher}
               />
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title="Sign Up"
+                title={`Switch to ${isSignup ? "Sign In" : "Sign Up"}`}
                 color={Colors.secondary}
-                onPress={(_) => {}}
+                onPress={(_) => {
+                  setSignup((prevState) => !prevState);
+                }}
               />
             </View>
           </ScrollView>

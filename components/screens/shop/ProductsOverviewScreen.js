@@ -7,6 +7,7 @@ import {
   View,
   StyleSheet,
   Text,
+  RefreshControl,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -19,20 +20,21 @@ import Colors from "../../../constants/Colors";
 
 const ProductsOverviewScreen = (props) => {
   const products = useSelector((state) => state.products.availableProducts);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(undefined);
   const dispatch = useDispatch();
 
   const loadProducts = useCallback(
     async (_) => {
       setError(undefined);
-      setIsLoading(true);
+      setIsRefreshing(true);
       try {
         await dispatch(productActions.fetchProducts());
       } catch (error) {
         setError(error.message);
       }
-      setIsLoading(false);
+      setIsRefreshing(false);
     },
     [dispatch, setIsLoading, setError]
   );
@@ -53,7 +55,10 @@ const ProductsOverviewScreen = (props) => {
 
   useEffect(
     (_) => {
-      loadProducts();
+      setIsLoading(true);
+      loadProducts().then((_) => {
+        setIsLoading(false);
+      });
     },
     [dispatch, loadProducts]
   );
@@ -93,9 +98,12 @@ const ProductsOverviewScreen = (props) => {
       </View>
     );
   }
-  
+
   return (
     <FlatList
+      refreshControl={
+        <RefreshControl onRefresh={loadProducts} refreshing={isRefreshing} />
+      }
       keyExtractor={(item) => item.id}
       data={products}
       renderItem={(itemData) => (

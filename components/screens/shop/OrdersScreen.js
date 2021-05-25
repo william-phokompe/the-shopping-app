@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { FlatList, ActivityIndicator, Text, StyleSheet } from "react-native";
+import { FlatList, ActivityIndicator, Text, StyleSheet, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
@@ -28,19 +28,9 @@ const OrdersScreen = (props) => {
     [dispatch, setIsLoading, setError]
   );
 
-  useEffect(
-    (_) => {
-      const willFocustSub = props.navigation.addListener(
-        "willFocus",
-        loadOrders
-      );
-
-      return () => {
-        willFocustSub.remove();
-      };
-    },
-    [loadOrders]
-  );
+  useEffect(_ => {
+    loadOrders()
+  }, [loadOrders])
 
   if (error) {
     return (
@@ -57,7 +47,7 @@ const OrdersScreen = (props) => {
 
   if (isLoading) {
     return (
-      <View>
+      <View style={styles.loader}>
         <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
@@ -65,8 +55,8 @@ const OrdersScreen = (props) => {
 
   if (!isLoading && orders.length === 0) {
     return (
-      <View>
-        <Text>There are no orders at this moment/ Please go make some...</Text>
+      <View style={styles.loader}>
+        <Text>There are no orders at this moment. Please go make some...</Text>
       </View>
     );
   }

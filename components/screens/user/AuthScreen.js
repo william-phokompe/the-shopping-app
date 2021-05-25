@@ -5,6 +5,8 @@ import {
   View,
   KeyboardAvoidingView,
   Button,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -43,6 +45,8 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = () => {
+  const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const [isSignup, setSignup] = useState(false);
   const dispatch = useDispatch();
 
@@ -58,7 +62,16 @@ const AuthScreen = () => {
     formIsValid: false,
   });
 
-  const authDispatcher = (_) => {
+  useEffect(
+    (_) => {
+      if (error) {
+        Alert.alert("An error has occurred", error, [{ text: Okay }]);
+      }
+    },
+    [error]
+  );
+
+  const authDispatcher = async (_) => {
     let action;
     if (isSignup) {
       action = authActions.signup(
@@ -71,8 +84,14 @@ const AuthScreen = () => {
         formState.inputValues.password
       );
     }
-
-    dispatch(action);
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(action);
+    } catch (err) {
+      setError(err);
+    }
+    setIsLoading(false);
   };
 
   const inputChangeHandler = useCallback(
@@ -116,11 +135,15 @@ const AuthScreen = () => {
               initialValue=""
             />
             <View style={styles.buttonContainer}>
-              <Button
-                title={isSignup ? "Sign Up" : "Sign In"}
-                color={Colors.primary}
-                onPress={authDispatcher}
-              />
+              {isLoading ? (
+                <ActivityIndicator size="small" color={Colors.primary} />
+              ) : (
+                <Button
+                  title={isSignup ? "Sign Up" : "Sign In"}
+                  color={Colors.primary}
+                  onPress={authDispatcher}
+                />
+              )}
             </View>
             <View style={styles.buttonContainer}>
               <Button

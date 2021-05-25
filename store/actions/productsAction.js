@@ -7,37 +7,30 @@ export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const fetchProducts = () => {
   return async (dispatch) => {
-    fetch(
+    const response = await fetch(
       "https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products.json"
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Something went wrong!");
-        }
+    );
 
-        return response.json();
-      })
-      .then((data) => {
-        const loadedProducts = [];
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
+    }
 
-        for (const key in data) {
-          loadedProducts.push(
-            new Product(
-              key,
-              "u1",
-              data[key].title,
-              data[key].imageUrl,
-              data[key].description,
-              data[key].price
-            )
-          );
-        }
-        dispatch({ type: SET_PRODUCTS, products: loadedProducts });
-      })
-      .catch((err) => {
-        // send to analytics server
-        throw err;
-      });
+    const data = await response.json();
+    const loadedProducts = [];
+
+    for (const key in data) {
+      loadedProducts.push(
+        new Product(
+          key,
+          "u1",
+          data[key].title,
+          data[key].imageUrl,
+          data[key].description,
+          data[key].price
+        )
+      );
+    }
+    dispatch({ type: SET_PRODUCTS, products: loadedProducts });
   };
 };
 

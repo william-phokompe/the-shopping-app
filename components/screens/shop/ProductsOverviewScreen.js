@@ -67,7 +67,7 @@ const ProductsOverviewScreen = (props) => {
 
   if (error) {
     return (
-      <View style={style.loader}>
+      <View style={styles.loader}>
         <Text>An error occurred!</Text>
         <Button
           title="Try Again"
@@ -77,10 +77,19 @@ const ProductsOverviewScreen = (props) => {
       </View>
     );
   }
-  if (!isLoading && products.length === 0) {
+
+  if (isLoading) {
     return (
       <View style={styles.loader}>
         <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
+  if (!isLoading && products.length === 0) {
+    return (
+      <View style={styles.loader}>
+        <Text>There are not products found. Try adding some...</Text>
       </View>
     );
   }

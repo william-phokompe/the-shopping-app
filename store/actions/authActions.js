@@ -3,13 +3,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // export const SIGNUP = "SIGNUP";
 // export const SIGNIN = "SIGNIN";
 export const AUTHENTICATE = "AUTHENTICATE";
+export const SIGNOUT = "SIGNOUT";
 
-export const authenticate = (userId, token) => {
-  return {
-    type: AUTHENTICATE,
-    userId: userId,
-    token: token,
-  };
+let timer;
+
+export const authenticate = (userId, token, expiryTime) => {
+  return dispatch => {
+    dispatch(setSignoutTimer(expiryTime))
+    dispatch({
+      type: AUTHENTICATE,
+      userId: userId,
+      token: token,
+    })
+  }
 };
 
 export const signup = (email, password) => {
@@ -44,7 +50,7 @@ export const signup = (email, password) => {
 
     const data = await response.json();
 
-    dispatch(authenticate(data.localId, data.idToken));
+    dispatch(authenticate(data.localId, data.idToken, parseInt(data.expiresIn) * 1000));
     const expirationDate = new Date(
       new Date().getTime() + parseInt(data.expiresIn) * 1000
     ).toISOString();
@@ -89,12 +95,26 @@ export const signin = (email, password) => {
 
     const data = await response.json();
 
-    dispatch(authenticate(data.localId, data.idToken));
+    dispatch(authenticate(data.localId, data.idToken, parseInt(data.expiresIn) * 1000));
     const expirationDate = new Date(
       new Date().getTime() + parseInt(data.expiresIn) * 1000
     ).toISOString();
     saveDataToStorage(data.idToken, data.localId, expirationDate);
   };
+};
+
+const setSignoutTimer = (expirationTime) => {
+  return (dispatch) => {
+    timer = setTimeout(() => {
+      dispatch(signout());
+    }, expirationTime);
+  };
+};
+
+const clearSignoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
 };
 
 const saveDataToStorage = (token, userId, expirationDate) => {
@@ -106,4 +126,10 @@ const saveDataToStorage = (token, userId, expirationDate) => {
       expiryDate: expirationDate,
     })
   );
+};
+
+export const signout = () => {
+  clearSignoutTimer()
+  AsyncStorage.removeItem('userData');
+  return { type: SIGNOUT };
 };

@@ -1,5 +1,16 @@
-export const SIGNUP = "SIGNUP";
-export const SIGNIN = "SIGNIN";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// export const SIGNUP = "SIGNUP";
+// export const SIGNIN = "SIGNIN";
+export const AUTHENTICATE = "AUTHENTICATE";
+
+export const authenticate = (userId, token) => {
+  return {
+    type: AUTHENTICATE,
+    userId: userId,
+    token: token,
+  };
+};
 
 export const signup = (email, password) => {
   return async (dispatch) => {
@@ -33,7 +44,11 @@ export const signup = (email, password) => {
 
     const data = await response.json();
 
-    dispatch({ type: SIGNUP, token: data.idToken, userId: data.localId });
+    dispatch(authenticate(data.localId, data.idToken));
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(data.expiresIn) * 1000
+    ).toISOString();
+    saveDataToStorage(data.idToken, data.localId, expirationDate);
   };
 };
 
@@ -66,7 +81,7 @@ export const signin = (email, password) => {
       } else if (errorId === "INVALID_PASSWORD") {
         message = "Password is not valid";
       } else if (errorId === "MISSING_PASSWORD") {
-        message = "Please enter password."
+        message = "Please enter password.";
       }
 
       throw new Error(message);
@@ -74,6 +89,21 @@ export const signin = (email, password) => {
 
     const data = await response.json();
 
-    dispatch({ type: SIGNIN, token: data.idToken, userId: data.localId });
+    dispatch(authenticate(data.localId, data.idToken));
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(data.expiresIn) * 1000
+    ).toISOString();
+    saveDataToStorage(data.idToken, data.localId, expirationDate);
   };
+};
+
+const saveDataToStorage = (token, userId, expirationDate) => {
+  AsyncStorage.setItem(
+    "userData",
+    JSON.stringify({
+      token,
+      userId,
+      expiryDate: expirationDate,
+    })
+  );
 };

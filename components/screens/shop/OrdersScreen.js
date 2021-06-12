@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   }
 })
 
-OrdersScreen.navigationOptions = (navigationData) => {
+export const screenOptions = (navigationData) => {
   return {
     headerTitle: "Your Orders",
     headerLeft: (_) => (

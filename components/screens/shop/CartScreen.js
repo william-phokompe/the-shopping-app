@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Button,
   ActivityIndicator,
+  StatusBar
 } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -31,6 +32,7 @@ const CartScreen = (props) => {
         productPrice: state.cart.items[key].productPrice,
         quantity: state.cart.items[key].quantity,
         sum: state.cart.items[key].sum,
+        productPushToken: state.cart.items[key].pushToken
       });
     }
     return transformedCartItem.sort((a, b) =>
@@ -80,6 +82,7 @@ const CartScreen = (props) => {
           />
         )}
       />
+      <StatusBar style="auto" />
     </View>
   );
 };

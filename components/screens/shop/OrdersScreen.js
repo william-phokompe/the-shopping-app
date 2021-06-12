@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { FlatList, ActivityIndicator, Text, StyleSheet, View } from "react-native";
+import { FlatList, ActivityIndicator, Text, StyleSheet, View, StatusBar } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
@@ -70,6 +70,7 @@ const OrdersScreen = (props) => {
   }
 
   return (
+    <>
     <FlatList
       data={orders}
       keyExtractor={(item) => item.id}
@@ -81,6 +82,8 @@ const OrdersScreen = (props) => {
         />
       )}
     />
+    <StatusBar style='auto' />
+    </>
   );
 };
 

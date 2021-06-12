@@ -1,3 +1,6 @@
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
+
 import Product from "../../models/Product";
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
@@ -24,6 +27,7 @@ export const fetchProducts = () => {
         new Product(
           key,
           data[key].ownerId,
+          data[key].ownerPushToken,
           data[key].title,
           data[key].imageUrl,
           data[key].description,
@@ -31,7 +35,11 @@ export const fetchProducts = () => {
         )
       );
     }
-    dispatch({ type: SET_PRODUCTS, products: loadedProducts, userProducts: loadedProducts.filter(prod => prod.ownerId === userId) });
+    dispatch({
+      type: SET_PRODUCTS,
+      products: loadedProducts,
+      userProducts: loadedProducts.filter((prod) => prod.ownerId === userId),
+    });
   };
 };
 
@@ -58,6 +66,18 @@ export const CreateProduct = (title, description, imageUrl, price) => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     // Execute any async code !
+
+    let pushToken;
+    let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    if (statusObj.status !== "granted") {
+      statusObj = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    }
+    if (statusObj.status !== "granted") {
+      pushToken = null;
+    } else {
+      pushToken = (await Notifications.getExpoPushTokenAsync()).data;
+    }
+
     const response = await fetch(
       `https://rn-complete-guide-a8532-default-rtdb.firebaseio.com/products.json?auth=${token}`,
       {
@@ -70,7 +90,8 @@ export const CreateProduct = (title, description, imageUrl, price) => {
           description,
           imageUrl,
           price,
-          ownerId: userId
+          ownerId: userId,
+          ownerPushToken: pushToken,
         }),
       }
     );
@@ -85,7 +106,8 @@ export const CreateProduct = (title, description, imageUrl, price) => {
         description,
         imageUrl,
         price,
-        ownerId: userId
+        ownerId: userId,
+        pushToken: pushToken,
       },
     });
   };

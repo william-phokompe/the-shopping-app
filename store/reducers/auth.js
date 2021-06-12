@@ -1,8 +1,9 @@
-import { AUTHENTICATE, SIGNOUT } from "../actions/authActions";
+import { AUTHENTICATE, SET_AUTO_LOGIN, SIGNOUT } from "../actions/authActions";
 
 const initialState = {
   token: null,
   userId: null,
+  didAutoLogin: false
 };
 
 export default (state = initialState, action) => {
@@ -11,9 +12,18 @@ export default (state = initialState, action) => {
       return {
         token: action.token,
         userId: action.userId,
+        didAutoLogin: true
       };
     case SIGNOUT:
-      return initialState;
+      return {
+        ...initialState,
+        didAutoLogin: true
+      };
+    case SET_AUTO_LOGIN:
+      return {
+        ...state,
+        didAutoLogin: true
+      }
 
     // case SIGNUP:
     //   return {

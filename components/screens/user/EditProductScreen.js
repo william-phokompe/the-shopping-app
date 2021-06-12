@@ -47,7 +47,8 @@ const formReducer = (state, action) => {
 const EditProductScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const productId = props.navigation.getParam("productId");
+  // const productId = props.navigation.getParam("productId");
+  const productId = props.route.params ? props.route.params.productId : null;
   const dispatch = useDispatch();
 
   const editedProduct = useSelector((state) =>
@@ -89,7 +90,7 @@ const EditProductScreen = (props) => {
     setError(null);
     try {
       setIsLoading(true);
-      console.log("Clicked SAVE")
+
       if (editedProduct) {
         await dispatch(
           productsActions.UpdateProduct(
@@ -117,7 +118,20 @@ const EditProductScreen = (props) => {
   }, [dispatch, productId, formState]); // formState will change with every keystroke
 
   useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
+    // props.navigation.setParams({ submit: submitHandler });
+    props.navigation.setOptions({
+      headerRight: (_) => (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title="Save"
+            iconName={
+              Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
+            }
+            onPress={submitHandler}
+          />
+        </HeaderButtons>
+      ),
+    });
   }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
@@ -209,22 +223,12 @@ const styles = StyleSheet.create({
 });
 
 export const screenOptions = (navigationData) => {
-  const submitFunc = navigationData.navigation.getParam("submit");
+  // const submitFunc = navigationData.route.params ? navigationData.route.params.submit : null;
+  const routeParams = navigationData.route.params
+    ? navigationData.route.params
+    : {};
   return {
-    headerTitle: navigationData.navigation.getParam("productId")
-      ? "Edit Product"
-      : "Add Product",
-    headerRight: (_) => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Save"
-          iconName={
-            Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
-          }
-          onPress={submitFunc}
-        />
-      </HeaderButtons>
-    ),
+    headerTitle: routeParams.productId ? "Edit Product" : "Add Product",
   };
 };
 

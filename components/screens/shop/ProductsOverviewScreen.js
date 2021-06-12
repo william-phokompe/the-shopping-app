@@ -41,13 +41,10 @@ const ProductsOverviewScreen = (props) => {
 
   useEffect(
     (_) => {
-      const willFocustSub = props.navigation.addListener(
-        "willFocus",
-        loadProducts
-      );
+      const unsubscribe = props.navigation.addListener("focus", loadProducts);
 
       return () => {
-        willFocustSub.remove();
+        unsubscribe();
       };
     },
     [loadProducts]

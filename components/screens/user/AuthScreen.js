@@ -89,7 +89,7 @@ const AuthScreen = (props) => {
     try {
       await dispatch(action);
 
-      !isSignup ? props.navigation.navigate("Shop") : setSignup(false);
+      // !isSignup ? props.navigation.navigate("Shop") : setSignup(false);
     } catch (err) {
       setError(err.message);
       setIsLoading(false);

@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
 });
 
-EditProductScreen.navigationOptions = (navigationData) => {
+export const screenOptions = (navigationData) => {
   const submitFunc = navigationData.navigation.getParam("submit");
   return {
     headerTitle: navigationData.navigation.getParam("productId")

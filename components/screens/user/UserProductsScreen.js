@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   }
 })
 
-UserProductsScreen.navigationOptions = (navigationData) => {
+export const screenOptions = (navigationData) => {
   return {
     headerTitle: "User Products",
     headerLeft: (_) => (
